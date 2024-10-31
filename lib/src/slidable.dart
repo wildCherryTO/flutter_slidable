@@ -18,7 +18,7 @@ class Slidable extends StatefulWidget {
   /// The [enabled], [closeOnScroll], [direction], [dragStartBehavior],
   /// [useTextDirection] and [child] arguments must not be null.
   const Slidable({
-    super.key,
+    required this.child,
     this.controller,
     this.groupTag,
     this.enabled = true,
@@ -28,8 +28,12 @@ class Slidable extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.dragStartBehavior = DragStartBehavior.down,
     this.useTextDirection = true,
-    required this.child,
+    this.onOpen,
+    super.key,
   });
+
+  /// On open notify
+  final ValueChanged<bool>? onOpen;
 
   /// The Slidable widget controller.
   final SlidableController? controller;
@@ -193,6 +197,7 @@ class _SlidableState extends State<Slidable>
   }
 
   void handleActionPanelTypeChanged() {
+    widget.onOpen?.call(!controller.closing);
     setState(() {
       updateMoveAnimation();
     });
