@@ -197,10 +197,10 @@ class _SlidableState extends State<Slidable>
   }
 
   void handleActionPanelTypeChanged() {
-    widget.onOpen?.call(!controller.closing);
     setState(() {
       updateMoveAnimation();
     });
+    widget.onOpen?.call(!controller.closing);
   }
 
   void handleDismissing() {
