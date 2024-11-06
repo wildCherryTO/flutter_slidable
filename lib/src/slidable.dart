@@ -183,7 +183,7 @@ class _SlidableState extends State<Slidable>
   }
 
   void _animationStatusListener(AnimationStatus status){
-    if (status==AnimationStatus.completed){
+    if (status==AnimationStatus.completed||status==AnimationStatus.dismissed){
       widget.onOpen?.call(!controller.closing);
     }
   }
