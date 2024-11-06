@@ -144,6 +144,8 @@ class _SlidableState extends State<Slidable>
     super.initState();
     controller = (widget.controller ?? SlidableController(this))
       ..actionPaneType.addListener(handleActionPanelTypeChanged);
+
+    controller.animation.addStatusListener(_animationStatusListener);
   }
 
   @override
@@ -171,12 +173,19 @@ class _SlidableState extends State<Slidable>
 
   @override
   void dispose() {
+    controller.animation.removeStatusListener(_animationStatusListener);
     controller.actionPaneType.removeListener(handleActionPanelTypeChanged);
 
     if (controller != widget.controller) {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  void _animationStatusListener(AnimationStatus status){
+    if (status==AnimationStatus.completed){
+      widget.onOpen?.call(!controller.closing);
+    }
   }
 
   void updateController() {
@@ -200,7 +209,6 @@ class _SlidableState extends State<Slidable>
     setState(() {
       updateMoveAnimation();
     });
-    widget.onOpen?.call(!controller.closing);
   }
 
   void handleDismissing() {
