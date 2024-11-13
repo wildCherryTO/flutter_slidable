@@ -176,6 +176,7 @@ class _SlidableState extends State<Slidable>
     controller.animation.removeStatusListener(_animationStatusListener);
     controller.actionPaneType.removeListener(handleActionPanelTypeChanged);
 
+    widget.onOpen?.call(false);
     if (controller != widget.controller) {
       controller.dispose();
     }
