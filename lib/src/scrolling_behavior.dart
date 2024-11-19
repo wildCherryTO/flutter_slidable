@@ -10,6 +10,7 @@ class SlidableScrollingBehavior extends StatefulWidget {
     super.key,
     required this.controller,
     this.closeOnScroll = true,
+    required this.onOpen,
     required this.child,
   });
 
@@ -20,6 +21,9 @@ class SlidableScrollingBehavior extends StatefulWidget {
   ///
   /// Defaults to true.
   final bool closeOnScroll;
+
+  /// On open notify
+  final ValueChanged<bool>? onOpen;
 
   /// The widget below this widget in the tree.
   ///
@@ -73,6 +77,11 @@ class _SlidableScrollingBehaviorState extends State<SlidableScrollingBehavior> {
     if (widget.closeOnScroll &&
         scrollPosition != null &&
         scrollPosition!.isScrollingNotifier.value) {
+
+      if (!widget.controller.closing){
+        widget.onOpen?.call(false);
+      }
+
       widget.controller.close();
     }
   }

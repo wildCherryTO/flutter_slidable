@@ -294,6 +294,7 @@ class _SlidableState extends State<Slidable>
         tag: widget.groupTag,
         controller: controller,
         child: SlidableScrollingBehavior(
+          onOpen: widget.onOpen,
           controller: controller,
           closeOnScroll: widget.closeOnScroll,
           child: SlidableDismissal(
