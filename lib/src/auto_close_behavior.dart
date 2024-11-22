@@ -31,21 +31,6 @@ class SlidableAutoCloseBehavior extends StatefulWidget {
   /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
-  /// Static method to manually close all [Slidable] widgets in a given group.
-  ///
-  /// [context] - BuildContext used to find the [SlidableAutoCloseBehavior].
-  /// [groupTag] - The group tag identifying the group of Slidable widgets to close.
-  static void closeAll(BuildContext context, Object? groupTag) {
-    SlidableGroupNotification.dispatch(
-      context,
-      SlidableAutoCloseNotification(
-        groupTag: groupTag,
-        controller: SlidableController(), // Placeholder: not used for closing all.
-        closeSelf: true,
-      ),
-      assertParentExists: false,
-    );
-  }
 
   @override
   State<SlidableAutoCloseBehavior> createState() =>
