@@ -186,7 +186,6 @@ class _SlidableState extends State<Slidable>
     super.dispose();
   }
 
-  void closeAll()=>controller.closeAll(groupTag:widget.groupTag);
 
   void _animationStatusListener(AnimationStatus status){
     if (status==AnimationStatus.completed||status==AnimationStatus.dismissed){

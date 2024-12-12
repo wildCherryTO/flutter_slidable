@@ -109,39 +109,6 @@ class SlidableController {
     direction.addListener(_onDirectionChanged);
   }
 
-  static final Map<Object, List<SlidableController>> _groupedControllers = {};
-
-  /// Adds the controller to the group.
-  void registerToGroup(Object? groupTag) {
-    if (groupTag == null) {
-      return;
-    }
-    final controllers = _groupedControllers.putIfAbsent(groupTag, () => []);
-    if (!controllers.contains(this)) {
-      controllers.add(this);
-    }
-  }
-
-  /// Removes the controller from the group.
-  void unregisterFromGroup(Object? groupTag) {
-    if (groupTag == null) {
-      return;
-    }
-    _groupedControllers[groupTag]?.remove(this);
-    if (_groupedControllers[groupTag]?.isEmpty ?? false) {
-      _groupedControllers.remove(groupTag);
-    }
-  }
-
-  /// Static method to close all Slidable instances in the same group.
-  Future<void> closeAll({Object? groupTag}) async {
-    final controllers = _groupedControllers[groupTag];
-    if (controllers != null) {
-      for (final controller in controllers) {
-        await controller.close();
-      }
-    }
-  }
 
   final AnimationController _animationController;
   final _ValueNotifier<DismissGesture?> _dismissGesture;
