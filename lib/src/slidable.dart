@@ -143,7 +143,7 @@ class _SlidableState extends State<Slidable>
   void initState() {
     super.initState();
     controller = (widget.controller ?? SlidableController(this))
-      ..actionPaneType.addListener(handleActionPanelTypeChanged);
+      ..actionPaneType.addListener(handleActionPanelTypeChanged)..registerToGroup(widget.groupTag);
 
     controller.animation.addStatusListener(_animationStatusListener);
   }
@@ -161,7 +161,8 @@ class _SlidableState extends State<Slidable>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.controller != widget.controller) {
-      controller.actionPaneType.removeListener(handleActionPanelTypeChanged);
+      controller..unregisterFromGroup(widget.groupTag)
+      ..actionPaneType.removeListener(handleActionPanelTypeChanged);
 
       controller = (widget.controller ?? SlidableController(this))
         ..actionPaneType.addListener(handleActionPanelTypeChanged);
@@ -184,6 +185,8 @@ class _SlidableState extends State<Slidable>
     }
     super.dispose();
   }
+
+  void closeAll()=>controller.closeAll(groupTag:widget.groupTag);
 
   void _animationStatusListener(AnimationStatus status){
     if (status==AnimationStatus.completed||status==AnimationStatus.dismissed){
