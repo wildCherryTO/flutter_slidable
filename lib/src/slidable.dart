@@ -33,7 +33,7 @@ class Slidable extends StatefulWidget {
   });
 
   /// On open notify
-  final ValueChanged<bool>? onOpen;
+  final void Function(bool status,ActionPaneType type)? onOpen;
 
   /// The Slidable widget controller.
   final SlidableController? controller;
@@ -143,7 +143,7 @@ class _SlidableState extends State<Slidable>
   void initState() {
     super.initState();
     controller = (widget.controller ?? SlidableController(this))
-      ..actionPaneType.addListener(handleActionPanelTypeChanged)..registerToGroup(widget.groupTag);
+      ..actionPaneType.addListener(handleActionPanelTypeChanged);
 
     controller.animation.addStatusListener(_animationStatusListener);
   }
@@ -161,8 +161,8 @@ class _SlidableState extends State<Slidable>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.controller != widget.controller) {
-      controller..unregisterFromGroup(widget.groupTag)
-      ..actionPaneType.removeListener(handleActionPanelTypeChanged);
+      controller
+      .actionPaneType.removeListener(handleActionPanelTypeChanged);
 
       controller = (widget.controller ?? SlidableController(this))
         ..actionPaneType.addListener(handleActionPanelTypeChanged);
@@ -178,7 +178,7 @@ class _SlidableState extends State<Slidable>
     controller.actionPaneType.removeListener(handleActionPanelTypeChanged);
 
     if (!controller.closing){
-      widget.onOpen?.call(false);
+      widget.onOpen?.call(false,controller.actionPaneType.value,);
     }
     if (controller != widget.controller) {
       controller.dispose();
@@ -189,7 +189,9 @@ class _SlidableState extends State<Slidable>
 
   void _animationStatusListener(AnimationStatus status){
     if (status==AnimationStatus.completed||status==AnimationStatus.dismissed){
-      widget.onOpen?.call(!controller.closing);
+      widget.onOpen?.call(!controller.closing,
+        controller.actionPaneType.value,
+      );
     }
   }
 
@@ -296,7 +298,7 @@ class _SlidableState extends State<Slidable>
         tag: widget.groupTag,
         controller: controller,
         child: SlidableScrollingBehavior(
-          onOpen: widget.onOpen,
+          onOpen:(status)=> widget.onOpen?.call(status,controller.actionPaneType.value,),
           controller: controller,
           closeOnScroll: widget.closeOnScroll,
           child: SlidableDismissal(
